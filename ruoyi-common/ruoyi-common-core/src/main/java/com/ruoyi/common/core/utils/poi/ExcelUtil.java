@@ -1226,7 +1226,7 @@ public class ExcelUtil<T>
     {
         List<Object[]> fields = new ArrayList<Object[]>();
         List<Field> tempFields = new ArrayList<>();
-        tempFields.addAll(Arrays.asList(clazz.getSuperclass().getDeclaredFields()));
+        addSuperClassFields(tempFields);
         tempFields.addAll(Arrays.asList(clazz.getDeclaredFields()));
         for (Field field : tempFields)
         {
@@ -1268,6 +1268,17 @@ public class ExcelUtil<T>
             }
         }
         return fields;
+    }
+
+    private void addSuperClassFields(List<Field> tempFields) {
+        Class superClass = clazz.getSuperclass();
+        while(!superClass.equals(Object.class)) {
+            Field[] declaredFields = superClass.getDeclaredFields();
+            if(declaredFields.length > 0) {
+                tempFields.addAll(Arrays.asList(declaredFields));
+            }
+            superClass = superClass.getSuperclass();
+        }
     }
 
     /**
